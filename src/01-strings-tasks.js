@@ -207,8 +207,24 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let first = '┌';
+  let middle = '│';
+  let last = '└';
+  for (let i = 1; i < width - 1; i += 1) {
+    first += '─';
+    middle += ' ';
+    last += '─';
+  }
+  first += '┐\n';
+  middle += '│\n';
+  last += '┘\n';
+  let out = first;
+  for (let i = 1; i < height - 1; i += 1) {
+    out += middle;
+  }
+  out += last;
+  return out;
 }
 
 
@@ -274,8 +290,16 @@ function isString(value) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const suit = {
+    '♣': 0, '♦': 1, '♥': 2, '♠': 3,
+  };
+  const card = {
+    A: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 8, 10: 9, J: 10, Q: 11, K: 12,
+  };
+  const c = value.slice(0, -1);
+  const s = value.at(-1);
+  return suit[s] * 13 + card[c];
 }
 
 
