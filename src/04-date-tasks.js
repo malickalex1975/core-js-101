@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(Date.parse(value));
 }
 
 /**
@@ -34,10 +34,9 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(Date.parse(value));
 }
-
 
 /**
  * Returns true if specified date is leap year and false otherwise
@@ -53,10 +52,19 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  if (year % 4 !== 0) {
+    return false;
+  }
+  if (year % 100 !== 0) {
+    return true;
+  }
+  if (year % 400 !== 0) {
+    return false;
+  }
+  return true;
 }
-
 
 /**
  * Returns the string representation of the timespan between two dates.
@@ -73,8 +81,30 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  let timespan = +endDate - startDate;
+  let sss = timespan % 1000;
+  timespan = Math.floor(timespan / 1000);
+  let ss = timespan % 60;
+  timespan = Math.floor(timespan / 60);
+  let mm = timespan % 60;
+  let hh = Math.floor(timespan / 60);
+  if (hh < 10) {
+    hh = `0${hh}`;
+  }
+  if (mm < 10) {
+    mm = `0${mm}`;
+  }
+  if (ss < 10) {
+    ss = `0${ss}`;
+  }
+  if (sss < 100 && sss > 10) {
+    sss = `0${sss}`;
+  }
+  if (sss < 10) {
+    sss = `00${sss}`;
+  }
+  return `${hh}:${mm}:${ss}.${sss}`;
 }
 
 
