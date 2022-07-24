@@ -366,8 +366,49 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const obj = {
+    '[]': 0,
+    '()': 0,
+    '{}': 0,
+    '<>': 0,
+  };
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === '[') {
+      obj['[]'] += 1;
+    }
+    if (str[i] === '(') {
+      obj['()'] += 1;
+    }
+    if (str[i] === '{') {
+      obj['{}'] += 1;
+    }
+    if (str[i] === '<') {
+      obj['<>'] += 1;
+    }
+    if (str[i] === ']') {
+      if (obj['[]'] < 1) return false;
+      if (i > 0 && (str[i - 1] === '{' || str[i - 1] === '(' || str[i - 1] === '<')) return false;
+      obj['[]'] -= 1;
+    }
+    if (str[i] === ')') {
+      if (i > 0 && (str[i - 1] === '{' || str[i - 1] === '[' || str[i - 1] === '<')) return false;
+      if (obj['()'] < 1) return false;
+      obj['()'] -= 1;
+    }
+    if (str[i] === '}') {
+      if (i > 0 && (str[i - 1] === '[' || str[i - 1] === '(' || str[i - 1] === '<')) return false;
+      if (obj['{}'] < 1) return false;
+      obj['{}'] -= 1;
+    }
+    if (str[i] === '>') {
+      if (i > 0 && (str[i - 1] === '{' || str[i - 1] === '(' || str[i - 1] === '[')) return false;
+      if (obj['<>'] < 1) return false;
+      obj['<>'] -= 1;
+    }
+  }
+  if (obj['[]'] === 0 && obj['()'] === 0 && obj['{}'] === 0 && obj['<>'] === 0) return true;
+  return false;
 }
 
 
@@ -504,8 +545,40 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let krestikRow = 0;
+  let krestikColumn = 0;
+  let krestikDiag1 = 0;
+  let krestikDiag2 = 0;
+  let nolikRow = 0;
+  let nolikColumn = 0;
+  let nolikDiag1 = 0;
+  let nolikDiag2 = 0;
+  for (let i = 0; i < 3; i += 1) {
+    for (let j = 0; j < 3; j += 1) {
+      if (position[i][j] === 'X') krestikRow += 1;
+      if (position[i][j] === '0') nolikRow += 1;
+      if (position[j][i] === 'X') krestikColumn += 1;
+      if (position[j][i] === '0') nolikColumn += 1;
+    }
+    if (krestikRow === 3) return 'X';
+    if (nolikRow === 3) return '0';
+    if (krestikColumn === 3) return 'X';
+    if (nolikColumn === 3) return '0';
+    krestikRow = 0;
+    nolikRow = 0;
+    krestikColumn = 0;
+    nolikColumn = 0;
+    if (position[i][i] === 'X') krestikDiag1 += 1;
+    if (position[i][i] === '0') nolikDiag1 += 1;
+    if (position[i][2 - i] === 'X') krestikDiag2 += 1;
+    if (position[i][2 - i] === '0') nolikDiag2 += 1;
+  }
+  if (krestikDiag1 === 3) return 'X';
+  if (nolikDiag1 === 3) return '0';
+  if (krestikDiag2 === 3) return 'X';
+  if (nolikDiag2 === 3) return '0';
+  return undefined;
 }
 
 

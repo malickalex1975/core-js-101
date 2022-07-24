@@ -115,32 +115,62 @@ function fromJSON(/* proto, json */) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  out: [],
+  selector: [],
+  element(value) {
+    this.selector.push(value);
+    return this;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    this.selector.push('#');
+    this.selector.push(value);
+    return this;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    this.selector.push('.');
+    this.selector.push(value);
+    return this;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    this.selector.push('[');
+    this.selector.push(value);
+    this.selector.push(']');
+    return this;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    this.selector.push(':');
+    this.selector.push(value);
+    return this;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    this.selector.push('::');
+    this.selector.push(value);
+    return this;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    // const a = this.selector.slice();
+    // this.selector = '';
+    const b = selector1.stringify();
+    this.selector = '';
+    console.log(selector2);
+    // const c = selector2.stringify();
+    this.selector = '';
+    this.selector = this.selector.concat(b, '    ', combinator, '   ');
+    return this;
+  },
+  getSelector() {
+    return this.selector;
+  },
+  stringify() {
+    this.out = this.selector.slice();
+    this.selector = [];
+    return this.out.reduce((a, b) => a + b);
   },
 };
 

@@ -143,10 +143,10 @@ function retry(/* func, attempts */) {
  */
 function logger(func, logFunc) {
   function f(...x) {
-    const arr = [x];
-    logFunc(`${func.name}(${(arr)}) starts`);
-    logFunc(`${func.name}(${(arr)}) ends`);
-    return func(...x);
+    logFunc(`${func.name}(${x}) starts`);
+    func(x);
+    logFunc(`${func.name}(${x}) ends`);
+    return func(x);
   }
   return f;
 }
