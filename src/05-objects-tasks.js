@@ -153,16 +153,8 @@ const cssSelectorBuilder = {
     return this;
   },
 
-  combine(selector1, combinator, selector2) {
-    // const a = this.selector.slice();
-    // this.selector = '';
-    const b = selector1.stringify();
-    this.selector = '';
-    console.log(selector2);
-    // const c = selector2.stringify();
-    this.selector = '';
-    this.selector = this.selector.concat(b, '    ', combinator, '   ');
-    return this;
+  combine(/*selector1, combinator, selector2*/) {
+    throw new Error('Not implemented');
   },
   getSelector() {
     return this.selector;
