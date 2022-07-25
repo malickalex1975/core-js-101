@@ -179,7 +179,7 @@ const cssSelectorBuilder = {
     return new BaseSelector().element(selector1).element(` ${combinator} `).element(selector2);
   },
   stringify() {
-     BaseSelector.stringify();
+    BaseSelector.stringify();
   },
 };
 
