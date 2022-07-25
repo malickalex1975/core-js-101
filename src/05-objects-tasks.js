@@ -55,8 +55,10 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const obj = JSON.parse(json);
+  Object.setPrototypeOf(obj, proto);
+  return obj;
 }
 
 
@@ -113,63 +115,78 @@ function fromJSON(/* proto, json */) {
  *
  *  For more examples see unit tests.
  */
+class BaseSelector {
+  constructor(value) {
+    this.selector = [];
+    this.selector.push(value);
+  }
 
-const cssSelectorBuilder = {
-  out: [],
-  selector: [],
   element(value) {
     this.selector.push(value);
-    return this;
+  }
+
+  id(value) {
+    this.selector.push(`#${value}`);
+  }
+
+  class(value) {
+    this.selector.push(`.${value}`);
+  }
+
+  attr(value) {
+    this.selector.push(`[${value}]`);
+  }
+
+  pseudoClass(value) {
+    this.selector.push(`:${value}`);
+  }
+
+  pseudoElement(value) {
+    this.selector.push(`::${value}`);
+  }
+
+  static stringify() {
+    // return this.selector.reduce((a, b) => a + b);
+    return this.selector;
+  }
+}
+const cssSelectorBuilder = {
+  element(value) {
+    return new BaseSelector(value);
   },
 
   id(value) {
-    this.selector.push('#');
-    this.selector.push(value);
-    return this;
+    return new BaseSelector().id(value);
   },
 
   class(value) {
-    this.selector.push('.');
-    this.selector.push(value);
-    return this;
+    return new BaseSelector().class(value);
   },
 
   attr(value) {
-    this.selector.push('[');
-    this.selector.push(value);
-    this.selector.push(']');
-    return this;
+    return new BaseSelector().attr(value);
   },
 
   pseudoClass(value) {
-    this.selector.push(':');
-    this.selector.push(value);
-    return this;
+    return new BaseSelector().pseudoClass(value);
   },
 
   pseudoElement(value) {
-    this.selector.push('::');
-    this.selector.push(value);
-    return this;
+    return new BaseSelector().pseudoElement(value);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
-  },
-  getSelector() {
-    return this.selector;
+  combine(selector1, combinator, selector2) {
+    return new BaseSelector().element(selector1).element(` ${combinator} `).element(selector2);
   },
   stringify() {
-    this.out = this.selector.slice();
-    this.selector = [];
-    return this.out.reduce((a, b) => a + b);
+     BaseSelector.stringify();
   },
 };
-
 
 module.exports = {
   Rectangle,
   getJSON,
   fromJSON,
   cssSelectorBuilder,
+  BaseSelector,
 };
